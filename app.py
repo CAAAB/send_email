@@ -8,55 +8,161 @@ import requests
 smtp_username = os.environ.get('SMTP_USERNAME')
 smtp_password = os.environ.get('SMTP_PASSWORD')
 
-"""
-import miniupnpc
+simple_form = """<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type=text], input[type=email], textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
 
-def setup_port_forward(port):
-    try:
-        upnp = miniupnpc.UPnP()
-        upnp.discoverdelay = 10
-        upnp.discover()
-        upnp.selectigd()
+    <form method="POST" action="/send-email">
+        <label for="from_name">From Name:</label>
+        <input type="text" id="from_name" name="from_name">
         
-        # Add a new port forwarding rule
-        upnp.addportmapping(port, 'TCP', upnp.lanaddr, port, 'Port Forwarding', '')
+        <label for="from_email">From Email:</label>
+        <input type="email" id="from_email" name="from_email">
+        
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject">
+        
+        <label for="body">Body:</label>
+        <textarea id="body" name="body"></textarea>
+        
+        <label for="recipient">Recipient:</label>
+        <input type="email" id="recipient" name="recipient">
+        
+        <input type="submit" value="Send Email">
+    </form>
 
-        print(f"Port forwarding set up: External Port {port} -> Internal {upnp.lanaddr}:{port}")
-    except Exception as e:
-        print(f"Error setting up port forwarding: {e}")
-
-setup_port_forward(5000)
-
-
-def get_public_ip():
-    try:
-        response = requests.get('https://api.ipify.org')
-        if response.status_code == 200:
-            return response.text
-        else:
-            return "Could not determine public IP"
-    except requests.RequestException as e:
-        return f"Error occurred: {e}"
-
-public_ip = get_public_ip()
-print(f"Public IP Address: {public_ip}")
-
+</body>
+</html>
 """
+
+better_form = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type=text], input[type=email], textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <form method="POST" action="/send-email">
+        <label for="from_name">From Name:</label>
+        <input type="text" id="from_name" name="from_name">
+        
+        <label for="from_email">From Email:</label>
+        <input type="email" id="from_email" name="from_email">
+        
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject">
+        
+        <label for="body">Body:</label>
+        <textarea id="body" name="body"></textarea>
+        
+        <label for="recipient">Recipient:</label>
+        <input type="email" id="recipient" name="recipient">
+        
+        <input type="submit" value="Send Email">
+    </form>
+
+</body>
+</html>
+"""
+form = better_form
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return '''
-        <form method="POST" action="/send-email">
-            From Name: <input type="text" name="from_name"><br>
-            From Email: <input type="email" name="from_email"><br>
-            Subject: <input type="text" name="subject"><br>
-            Body: <textarea name="body"></textarea><br>
-            Recipient: <input type="email" name="recipient"><br>
-            <input type="submit" value="Send Email">
-        </form>
-    '''
+    return form
 
 @app.route('/send-email', methods=['POST'])
 def send_email():
