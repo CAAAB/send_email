@@ -8,6 +8,7 @@ import requests
 smtp_username = os.environ.get('SMTP_USERNAME')
 smtp_password = os.environ.get('SMTP_PASSWORD')
 
+"""
 import miniupnpc
 
 def setup_port_forward(port):
@@ -40,7 +41,7 @@ def get_public_ip():
 public_ip = get_public_ip()
 print(f"Public IP Address: {public_ip}")
 
-
+"""
 
 app = Flask(__name__)
 
@@ -48,11 +49,11 @@ app = Flask(__name__)
 def index():
     return '''
         <form method="POST" action="/send-email">
+            From Name: <input type="text" name="from_name"><br>
+            From Email: <input type="email" name="from_email"><br>
             Subject: <input type="text" name="subject"><br>
             Body: <textarea name="body"></textarea><br>
             Recipient: <input type="email" name="recipient"><br>
-            From Name: <input type="text" name="from_name"><br>
-            From Email: <input type="email" name="from_email"><br>
             <input type="submit" value="Send Email">
         </form>
     '''
