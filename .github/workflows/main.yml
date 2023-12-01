@@ -1,0 +1,28 @@
+name: Start app
+
+on:
+  schedule:
+  - cron: '*/10 * * * *'  # This sets the action to run every 4 hours
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Telegram Bot
+      env:
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      run: python app.py
