@@ -42,3 +42,7 @@ jobs:
         sleep 10 # Give ngrok some time to establish the tunnel
         NGROK_TUNNEL_URL=$(curl --silent --max-time 10 http://localhost:4040/api/tunnels | jq .tunnels[0].public_url)
         echo "Ngrok tunnel URL: $NGROK_TUNNEL_URL"
+        while true; do
+          echo "Keeping the workflow running..."
+          sleep 600 # Sleep for 10 minutes
+        done
