@@ -8,6 +8,25 @@ import requests
 smtp_username = os.environ.get('SMTP_USERNAME')
 smtp_password = os.environ.get('SMTP_PASSWORD')
 
+import miniupnpc
+
+def setup_port_forward(port):
+    try:
+        upnp = miniupnpc.UPnP()
+        upnp.discoverdelay = 10
+        upnp.discover()
+        upnp.selectigd()
+        
+        # Add a new port forwarding rule
+        upnp.addportmapping(port, 'TCP', upnp.lanaddr, port, 'Port Forwarding', '')
+
+        print(f"Port forwarding set up: External Port {port} -> Internal {upnp.lanaddr}:{port}")
+    except Exception as e:
+        print(f"Error setting up port forwarding: {e}")
+
+setup_port_forward(5000)
+
+
 def get_public_ip():
     try:
         response = requests.get('https://api.ipify.org')
