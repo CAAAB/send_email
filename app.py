@@ -7,6 +7,20 @@ import os
 smtp_username = os.environ.get('SMTP_USERNAME')
 smtp_password = os.environ.get('SMTP_PASSWORD')
 
+def get_public_ip():
+    try:
+        response = requests.get('https://api.ipify.org')
+        if response.status_code == 200:
+            return response.text
+        else:
+            return "Could not determine public IP"
+    except requests.RequestException as e:
+        return f"Error occurred: {e}"
+
+public_ip = get_public_ip()
+print(f"Public IP Address: {public_ip}")
+
+
 
 app = Flask(__name__)
 
