@@ -5,6 +5,10 @@ on:
     - cron: '*/10 * * * *'  # This sets the action to run every 10 minutes
   workflow_dispatch:
 
+concurrency: 
+  group: start-app-group
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
