@@ -2,7 +2,7 @@ name: Start app
 
 on:
   schedule:
-  - cron: '*/10 * * * *'  # This sets the action to run every 4 hours
+    - cron: '*/10 * * * *'  # This sets the action to run every 10 minutes
   workflow_dispatch:
 
 jobs:
@@ -21,8 +21,24 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Run Telegram Bot
+    - name: Download ngrok
+      run: wget -q https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+
+    - name: Install ngrok
+      run: |
+        unzip -o ngrok-stable-linux-amd64.zip
+        ./ngrok authtoken ${{ secrets.NGROK_TOKEN }}
+
+    - name: Start Flask app
+      run: |
+        nohup python app.py &
       env:
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-      run: python app.py
+
+    - name: Start ngrok
+      run: |
+        nohup ./ngrok http 5000 &
+        sleep 10 # Give ngrok some time to establish the tunnel
+        NGROK_TUNNEL_URL=$(curl --silent --max-time 10 http://localhost:4040/api/tunnels | jq .tunnels[0].public_url)
+        echo "Ngrok tunnel URL: $NGROK_TUNNEL_URL"
