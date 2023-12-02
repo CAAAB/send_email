@@ -2,7 +2,7 @@ name: Start app
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # This sets the action to run every 10 minutes
+    - cron: '*/30 * * * *'  # This sets the action to run every 10 minutes
   workflow_dispatch:
 
 concurrency: 
