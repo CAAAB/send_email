@@ -25,8 +25,8 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Download ngrok
-      run: wget -q https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+    #- name: Download ngrok
+    #  run: wget -q https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
 
     - name: Install ngrok
       run: |
