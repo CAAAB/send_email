@@ -82,24 +82,35 @@ better_form = """
     
 <script>
     function checkDomain() {
+        var indicator = document.getElementById('domain_indicator');
         var email = document.getElementById('from_email').value;
         var domain = email.split('@')[1];
+
+        // Initially set to question mark
+        indicator.innerHTML = '❓';
+
         if (domain) {
             fetch('/check-domain/' + domain)
                 .then(response => response.json())
                 .then(data => {
-                    var indicator = document.getElementById('domain_indicator');
                     if (data.is_vulnerable === 1) {
                         indicator.innerHTML = '✅';  // Tick mark emoji
                     } else if (data.is_vulnerable === 0) {
                         indicator.innerHTML = '❌';  // Red cross emoji
-                    } else {
-                        indicator.innerHTML = '❓';  // Question mark emoji
-                    }
+                    } 
+                    // If the response is neither 1 nor 0, it remains as a question mark
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                    indicator.innerHTML = '❓';  // Reset to question mark in case of an error
                 });
+        } else {
+            // If the domain is not valid or email field is empty, reset to question mark
+            indicator.innerHTML = '❓';
         }
     }
 </script>
+
 
 </body>
 </html>
