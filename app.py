@@ -58,6 +58,23 @@ better_form = """
             margin-top: 10px;
             display: block;
         }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        
+        .input-group label,
+        .input-group input,
+        .input-group span {
+            margin-right: 10px; /* Add some spacing between the elements */
+        }
+        
+        /* Optional: Style to make the indicator stand out */
+        #domain_indicator {
+            font-size: 1.2em;
+        }
+
     </style>
 </head>
 <body>
@@ -66,9 +83,11 @@ better_form = """
         <label for="from_name">From Name:</label>
         <input type="text" id="from_name" name="from_name">
         
-        <label for="from_email">From Email:</label>
-        <input type="email" id="from_email" name="from_email">
-        <span id="domain_indicator"></span>
+        <div class="input-group">
+            <label for="from_email">From Email:</label>
+            <input type="email" id="from_email" name="from_email" oninput="checkDomain()">
+            <span id="domain_indicator"></span>
+        </div>
         
         <label for="subject">Subject:</label>
         <input type="text" id="subject" name="subject">
