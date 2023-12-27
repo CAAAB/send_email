@@ -79,7 +79,7 @@ better_form = """
 </head>
 <body>
 
-    <form method="POST" action="/send-email">
+    <form method="POST" action="/send-email" onsubmit="submitForm(event)">
         <label for="from_name">From Name:</label>
         <input type="text" id="from_name" name="from_name">
         
@@ -129,6 +129,24 @@ better_form = """
             // If the domain is not valid or email field is empty, reset to question mark
             indicator.innerHTML = '❓';
         }
+    }
+    // JavaScript function to handle form submission
+    function submitForm(event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        var formData = new FormData(event.target);  // Create FormData object from the form
+
+        fetch('/send-email', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())  // Convert response to text
+        .then(data => {
+            alert(data);  // Display the result in an alert popup
+        })
+        .catch(error => {
+            alert('Error: ' + error);  // Display errors, if any
+        });
     }
 </script>
 
