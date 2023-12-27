@@ -83,8 +83,8 @@ better_form = """
         <label for="from_name">From Name:</label>
         <input type="text" id="from_name" name="from_name">
         
+        <label for="from_email">From Email:</label>
         <div class="input-group">
-            <label for="from_email">From Email:</label>
             <input type="email" id="from_email" name="from_email" oninput="checkDomain()">
             <span id="domain_indicator"></span>
         </div>
@@ -107,27 +107,33 @@ better_form = """
         var email = document.getElementById('from_email').value;
         var domain = email.split('@')[1];
 
-        // Initially set to question mark
+        // Initially set to question mark with a default explainer
         indicator.innerHTML = '❓';
+        indicator.title = 'Enter a valid email to check domain';
 
         if (domain) {
             fetch('/check-domain/' + domain)
                 .then(response => response.json())
                 .then(data => {
                     if (data.is_vulnerable === 1) {
-                        indicator.innerHTML = '✅';  // Tick mark emoji
+                        indicator.innerHTML = '✅';  
+                        indicator.title = 'Domain is vulnerable';
                     } else if (data.is_vulnerable === 0) {
-                        indicator.innerHTML = '❌';  // Red cross emoji
-                    } 
-                    // If the response is neither 1 nor 0, it remains as a question mark
+                        indicator.innerHTML = '❌'; 
+                        indicator.title = 'Domain is not vulnerable';
+                    } else {
+                        indicator.title = 'Vulnerability status unknown';
+                    }
                 })
                 .catch(error => {
                     console.log('Error:', error);
-                    indicator.innerHTML = '❓';  // Reset to question mark in case of an error
+                    indicator.innerHTML = '❓';
+                    indicator.title = 'Error checking domain';
                 });
         } else {
-            // If the domain is not valid or email field is empty, reset to question mark
+            // If the domain is not valid or email field is empty, reset to default
             indicator.innerHTML = '❓';
+            indicator.title = 'Enter a valid email to check domain';
         }
     }
     // JavaScript function to handle form submission
