@@ -15,17 +15,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Create keepalive file
-      run: touch keepalive
-
-    - name: Commit and push keepalive file
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add keepalive
-        git commit -m "Add keepalive file"
-        git push
       
     - name: Set up Python
       uses: actions/setup-python@v2
